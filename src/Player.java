@@ -9,7 +9,7 @@ public class Player {
         this.x = x;
         this.y = y;
         this.width = 40;
-        this.height = 10;
+        this.height = 5;
         this.right = false;
         this.left = false;
     }

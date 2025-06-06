@@ -10,19 +10,23 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 public class Game extends Canvas implements Runnable, KeyListener {
-    public static int WIDTH = 240;
+    public static int WIDTH = 160;
     public static int HEIGHT = 120;
     public static int SCALE = 3;
+    
+    public static Player player;
+    public static Enemie enemie;
+    public static Ball ball;
 
     public BufferedImage layer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-
-    public Player player;
 
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         this.addKeyListener(this);
 
-        player = new Player(100, HEIGHT - 10);
+        player = new Player((WIDTH / 2) - 20, HEIGHT - 5);
+        enemie = new Enemie((WIDTH / 2) - 20, 0);
+        ball = new Ball((WIDTH / 2) - 2, HEIGHT / 2);
     }
 
     public static void main(String[] args) {
@@ -41,6 +45,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public void tick() {
         player.tick();
+        enemie.tick();
+        ball.tick();
     }
     
     public void render() {
@@ -54,7 +60,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
         Graphics g = layer.getGraphics();
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, HEIGHT);
+
         player.render(g);
+        enemie.render(g);
+        ball.render(g);
 
         g = bs.getDrawGraphics();
         g.drawImage(layer, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
@@ -65,6 +74,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     @Override
     public void run() {
         while (true) {
+            requestFocus();
             tick();
             render();
             try {
